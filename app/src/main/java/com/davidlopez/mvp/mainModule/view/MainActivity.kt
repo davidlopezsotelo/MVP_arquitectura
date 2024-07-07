@@ -1,15 +1,22 @@
-package com.davidlopez.mvp
+package com.davidlopez.mvp.mainModule.view
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.davidlopez.mvp.EventBus
+import com.davidlopez.mvp.SportEvent
 import com.davidlopez.mvp.databinding.ActivityMainBinding
+import com.davidlopez.mvp.getAdEventsInRealtime
+import com.davidlopez.mvp.getResultEventsInRealtime
+import com.davidlopez.mvp.someTime
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(),OnClickListener{
+class MainActivity : AppCompatActivity(), OnClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ResultAdapter
@@ -42,7 +49,7 @@ class MainActivity : AppCompatActivity(),OnClickListener{
 
     private fun setupSwipeRefresh() {
         binding.srlResults.setOnRefreshListener {
-            adapter.clear()
+            //adapter.clear()
             getEvents()
             binding.btnAd.visibility = View.VISIBLE
         }
@@ -51,14 +58,14 @@ class MainActivity : AppCompatActivity(),OnClickListener{
         binding.btnAd.run {
             setOnClickListener {
                 lifecycleScope.launch {
-                    binding.srlResults.isRefreshing = true
+                   // binding.srlResults.isRefreshing = true
                     val events = getAdEventsInRealtime()
                     EventBus.instance().publish(events.first())
                 }
             }
             setOnLongClickListener { view ->
                 lifecycleScope.launch {
-                    binding.srlResults.isRefreshing = true
+                   // binding.srlResults.isRefreshing = true
                     EventBus.instance().publish(SportEvent.ClosedAdEvent)
                 }
                 true
@@ -76,6 +83,13 @@ class MainActivity : AppCompatActivity(),OnClickListener{
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        getEvents()
+    }
+
+
+
     // OnClickListener-------------------------------------------------------------------------------
     override fun onClick(result: SportEvent.ResultSuccess) {
 
@@ -84,4 +98,29 @@ class MainActivity : AppCompatActivity(),OnClickListener{
             //SportService.instance().saveResult(result)
         }
     }
+
+    /*
+    * View Layer---------CAPA DE VISTA----------------------------------------------------------------
+    * */
+
+
+    fun add(event: SportEvent.ResultSuccess){ adapter.add(event) }
+
+    fun clearAdapter(){ adapter.clear() }
+
+    fun showAdUI(isVisible: Boolean){
+        binding.btnAd.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
+    fun showProgress(isVisible: Boolean){
+        binding.srlResults.isRefreshing = isVisible
+    }
+
+    fun showToast(msg:String){
+        Toast.makeText(this@MainActivity, msg,Toast.LENGTH_SHORT).show()
+    }
+    fun showSnackBar(msg:String){
+        Snackbar.make(binding.root, msg,Snackbar.LENGTH_LONG).show()
+    }
+
 }
