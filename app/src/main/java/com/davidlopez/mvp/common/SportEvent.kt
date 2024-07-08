@@ -24,7 +24,7 @@ sealed class SportEvent {
 
     data object AdEvent: SportEvent()
     data object SaveEvent: SportEvent()
-    data object CloseEvent: SportEvent()
+   // data object CloseEvent: SportEvent()
 
     data object ClosedAdEvent: SportEvent()
 }
