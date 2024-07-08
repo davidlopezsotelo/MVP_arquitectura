@@ -1,4 +1,6 @@
-package com.davidlopez.mvp
+package com.davidlopez.mvp.common
+
+import com.davidlopez.mvp.R
 
 sealed class SportEvent {
 

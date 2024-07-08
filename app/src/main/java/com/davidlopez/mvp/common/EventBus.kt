@@ -1,4 +1,4 @@
-package com.davidlopez.mvp
+package com.davidlopez.mvp.common
 
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow

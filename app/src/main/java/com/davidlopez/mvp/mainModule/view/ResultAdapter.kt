@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.davidlopez.mvp.R
-import com.davidlopez.mvp.SportEvent
+import com.davidlopez.mvp.common.SportEvent
 import com.davidlopez.mvp.databinding.ItemEventBinding
 
 class ResultAdapter(private val listener: OnClickListener) : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {

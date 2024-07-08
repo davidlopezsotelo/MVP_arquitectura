@@ -1,13 +1,9 @@
 package com.davidlopez.mvp.mainModule.presenter
 
-import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
-import com.davidlopez.mvp.EventBus
-import com.davidlopez.mvp.SportEvent
+import com.davidlopez.mvp.common.EventBus
+import com.davidlopez.mvp.common.SportEvent
 import com.davidlopez.mvp.mainModule.model.MainRepository
 import com.davidlopez.mvp.mainModule.view.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,11 +25,12 @@ class MainPresenter(private val view:MainActivity) {
 
     suspend fun refresh(){
         view.clearAdapter()
-        getEvents()
         view.showAdUI(true)
+        getEvents()
+
     }
 
-    private suspend fun getEvents() {
+     suspend fun getEvents() {
         view.showProgress(true)
         repository.getEvent()
     }
@@ -45,7 +42,7 @@ class MainPresenter(private val view:MainActivity) {
             repository.closeAd()
         }
 
-    suspend fun saveResult(result:SportEvent.ResultSuccess){
+    suspend fun saveResult(result: SportEvent.ResultSuccess){
         view.showProgress(true)
         repository.saveResult(result)
     }
@@ -55,9 +52,10 @@ class MainPresenter(private val view:MainActivity) {
 
         viewScope.launch {
 
+            // metemos el when dentro de un bloque this.launch (Lanza esta(corrutina), para mantener dentro del mismo contexto)
             EventBus.instance().susbcribe<SportEvent> { event ->
-
-                when (event) {
+                this.launch {
+                    when (event) {
                     is SportEvent.ResultSuccess -> {
                         view.add(event)
                         view.showProgress(false)
@@ -76,7 +74,8 @@ class MainPresenter(private val view:MainActivity) {
                     is SportEvent.ClosedAdEvent ->
                         view.showAdUI(false)
                     else ->{}
-                }
+                }  }
+
             }
         }
     }

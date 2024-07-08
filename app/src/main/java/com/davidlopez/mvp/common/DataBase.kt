@@ -1,4 +1,4 @@
-package com.davidlopez.mvp
+package com.davidlopez.mvp.common
 
 import kotlin.random.Random
 
@@ -14,7 +14,7 @@ fun getResultEventsInRealtime() = listOf(
     SportEvent.ResultSuccess(3, "Gimnasia Rítmica", listOf("Rusia", "USA", "Francia")),
     SportEvent.ResultSuccess(4, "Polo Acuático", listOf("España", "Vietnam", "USA")),
     SportEvent.ResultSuccess(5, "Béisbol", null, true),
-    SportEvent.ResultError(20, "Error de permisos."),
+    //SportEvent.ResultError(20, "Error de permisos."),
     SportEvent.ResultSuccess(6, "Rugby", listOf("Sudáfrica", "Qatar", "Rumanía")),
     SportEvent.ResultSuccess(7, "Tenis", listOf("España", "México", "Colombia"))
 )
